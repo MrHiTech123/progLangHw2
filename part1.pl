@@ -40,7 +40,9 @@ verbPhraseAllowsForPlayers(Query, Plurality, [AllowVerbThatGameDoes | VerbPhrase
 	
 verbPhraseTakesMinutes(Query, Plurality, [TakeVerbThatGameDoes | VerbPhraseTail], S) :-
 	matchPluralityToTakePlurality(Plurality, TakeVerbThatGameDoes),
-	number(VerbPhraseTail, NumberOfMinutes, MinutesLiteral),
+	word(less, VerbPhraseTail, VerbPhraseTailAfterLess),
+	word(than, VerbPhraseTailAfterLess, VerbPhraseTailAfterThan),
+	number(VerbPhraseTailAfterThan, NumberOfMinutes, MinutesLiteral),
 	popHeadOff(MinutesLiteral, minutes, S),
 	equals(Query, [takes_minutes, NumberOfMinutes]).
 
