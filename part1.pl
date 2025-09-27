@@ -33,14 +33,16 @@ number([Head | Tail], Head, Tail) :- integer(Head).
 verbPhraseAllowsForPlayers(Query, Plurality, [AllowVerbThatGameDoes | VerbPhraseTail], S) :-
 	matchPluralityToAllowPlurality(Plurality, AllowVerbThatGameDoes),
 	word(for, VerbPhraseTail, NumberAndPlayersLiteral),
-	number(NumberAndPlayersLiteral, NumberOfPlayers, [players]),
+	number(NumberAndPlayersLiteral, NumberOfPlayers, PlayersLiteral),
+	popHeadOff(PlayersLiteral, players, S),
 	equals(Query, [allow_players, NumberOfPlayers]).
 	
 	
 verbPhraseTakesMinutes(Query, Plurality, [TakeVerbThatGameDoes | VerbPhraseTail], S) :-
 	matchPluralityToTakePlurality(Plurality, TakeVerbThatGameDoes),
-	number(VerbPhraseTail, NumberOfMinutes, [minutes]),
-	equals(Query, [allow_players, NumberOfMinutes])
+	number(VerbPhraseTail, NumberOfMinutes, MinutesLiteral),
+	popHeadOff(MinutesLiteral, minutes, S),
+	equals(Query, [takes_minutes, NumberOfMinutes]).
 
 verbPhrase(Query, Plurality, [VerbThatGameDoes | VerbPhraseTail], S) :-
 	verbPhraseAllowsForPlayers(Query, Plurality, [VerbThatGameDoes | VerbPhraseTail], S);
