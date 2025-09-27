@@ -1,6 +1,5 @@
 equals(A, A).
 
-popHeadOff([Head | Tail], Head, Tail).
 
 matchKeyToValue([KeysHead | KeysTail], [ValuesHead | ValuesTail], Key, Value) :-
 	equals(KeysHead, Key), equals(ValuesHead, Value);
