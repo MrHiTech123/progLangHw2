@@ -1,0 +1,1 @@
+prolog games_small.pl part1.pl

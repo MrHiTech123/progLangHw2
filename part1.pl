@@ -34,7 +34,7 @@ verbPhraseAllowsForPlayers(Query, Plurality, [AllowVerbThatGameDoes | VerbPhrase
 	matchPluralityToAllowPlurality(Plurality, AllowVerbThatGameDoes),
 	word(for, VerbPhraseTail, NumberAndPlayersLiteral),
 	number(NumberAndPlayersLiteral, NumberOfPlayers, PlayersLiteral),
-	popHeadOff(PlayersLiteral, players, S),
+	word(players, PlayersLiteral, S),
 	equals(Query, [allow_players, NumberOfPlayers]).
 	
 	
@@ -43,7 +43,7 @@ verbPhraseTakesMinutes(Query, Plurality, [TakeVerbThatGameDoes | VerbPhraseTail]
 	word(less, VerbPhraseTail, VerbPhraseTailAfterLess),
 	word(than, VerbPhraseTailAfterLess, VerbPhraseTailAfterThan),
 	number(VerbPhraseTailAfterThan, NumberOfMinutes, MinutesLiteral),
-	popHeadOff(MinutesLiteral, minutes, S),
+	word(minutes, MinutesLiteral, S),
 	equals(Query, [time_check, NumberOfMinutes]).
 
 verbPhrase(Query, Plurality, [VerbThatGameDoes | VerbPhraseTail], S) :-
