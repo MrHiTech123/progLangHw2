@@ -1,0 +1,6 @@
+
+Part 2:
+[A, B, C, D]
+If haven't already started swapping: two possibilities: start swapping at Head, or don't
+If have already started swapping, two possibilities: finish swapping at B, or don't
+

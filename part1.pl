@@ -79,13 +79,20 @@ listInsert([Head | Tail], Index, InsertedElement, [ResultListHead | ResultListTa
 
 preProcessQuestionTimeCheck(Question, QuestionList) :-
 	atomic_list_concat(RawQuestionList, " ", Question),
-	write(RawQuestionList),
 	listPop(RawQuestionList, 5, AtomNumberOfMinutes, NumberPoppedList),
 	atom_number(AtomNumberOfMinutes, NumberOfMinutes),
 	listInsert(NumberPoppedList, 5, NumberOfMinutes, QuestionList).
-	
+
+preProcessQuestionPlayerCheck(Question, QuestionList) :- 
+	atomic_list_concat(RawQuestionList, " ", Question),
+	listPop(RawQuestionList, 4, AtomNumberOfPlayers, NumberPoppedList),
+	atom_number(AtomNumberOfPlayers, NumberOfPlayers),
+	listInsert(NumberPoppedList, 4, NumberOfPlayers, QuestionList).
+
+
 preProcessQuestion(Question, QuestionList) :- 
-	preProcessQuestionTimeCheck(Question, QuestionList).
+	preProcessQuestionTimeCheck(Question, QuestionList);
+	preProcessQuestionPlayerCheck(Question, QuestionList).
 
 answerQuestionString(Question, Answer) :- 
 	preProcessQuestion(Question, QuestionList), answerQuestionList(QuestionList, Answer).
