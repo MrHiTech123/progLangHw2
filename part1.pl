@@ -91,9 +91,23 @@ answerQuestionString(Question, Answer) :-
 	preProcessQuestion(Question, QuestionList), answerQuestionList(QuestionList, Answer).
 
 
+%People online said to do this
+sorted(Sorted, Unsorted) :- sort(Sorted, Unsorted), sort(Sorted, Sorted).
 
 
 
+pluralityFromString(Question, Plurality) :- 
+	preProcessQuestion(Question, QuestionList),
+	question(Query, Plurality, QuestionList, []),
+	not(equals(Query, [])).
 
-
-ask_question(Question, Answer) :- askQuestion(Question, Answer).
+ask_question(Question, Answer) :- 
+	pluralityFromString(Question, Plurality),
+	(
+		equals(Plurality, plural), 
+		findall(X, answerQuestionString(Question, X), Bag),
+		msort(Bag, SortedBag),
+		equals(Answer, SortedBag);
+		
+		equals(Plurality, singular), answerQuestionString(Question, Answer)
+	).
