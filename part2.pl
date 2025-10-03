@@ -1,6 +1,10 @@
 equals(A, A).
 implies(P, Q) :- Q, not(P).
 
+exclusiveOr(P, Q) :- 
+	P, not(Q);
+	Q, not(P).
+
 transform([Head | [Second | Tail]], [Second | [Head | Tail]]).
 transform([Head | Tail], [TransformedHead | TransformedTail]) :- equals(Head, TransformedHead), transform(Tail, TransformedTail).
 
@@ -30,9 +34,7 @@ path([List1Head | List1Tail], [List2Head | List2Tail]) :-
 	equals(List1Head, List2Head),
 	pathSecond(List1Tail, List2Tail).
 
-exclusiveOr(P, Q) :- 
-	P, not(Q);
-	Q, not(P).
+
 
 pathUnique(Paths, List1, EndPaths) :-
 	path(List1, List2),
@@ -45,12 +47,13 @@ pathUnique(Paths, List1, EndPaths) :-
 			pathUnique([List2 | Paths], List1, EndPaths)
 		),
 		(
-			equals(Paths, EndPaths),
 			length(Paths, PathsLength),
-			equals(PathsLength, Permutations)
+			equals(PathsLength, Permutations),
+			equals(Paths, EndPaths)
 		)
 	).
 
+% Takes a list (EndPaths) and writes each element in it on a separate line.
 writeEach(EndPaths) :- 
 	equals(EndPaths, [EndPathsHead | EndPathsTail]), write(EndPathsHead), nl, writeEach(EndPathsTail); 
 	
@@ -58,9 +61,8 @@ writeEach(EndPaths) :-
 
 write_all(List1) :-
 	pathUnique([], List1, EndPaths),
-	%sort(EndPaths, EndPaths),
 	writeEach(EndPaths),
-	write("TERMINATED"),
+	write("TERMINATED"), %This printed automatically for me at some point and I have no idea why. In the final version I had to print it manually
 	nl,
 	halt(0).
 
