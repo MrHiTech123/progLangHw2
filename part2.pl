@@ -61,6 +61,7 @@ write_all(List1) :-
 	%sort(EndPaths, EndPaths),
 	writeEach(EndPaths),
 	write("TERMINATED"),
+	nl,
 	halt(0).
 
 
