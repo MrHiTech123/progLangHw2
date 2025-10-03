@@ -1,11 +1,11 @@
 equals(A, A).
 
-
+%Use two lists of the same length as a set of key-value pairs.
 matchKeyToValue([KeysHead | KeysTail], [ValuesHead | ValuesTail], Key, Value) :-
 	equals(KeysHead, Key), equals(ValuesHead, Value);
 	matchKeyToValue(KeysTail, ValuesTail, Key, Value).
 
-
+%Specific uses of the above function
 matchGamePluralityToPlurality(GamePlurality, Plurality) :- 
 	matchKeyToValue([game, games], [singular, plural], GamePlurality, Plurality).
 
@@ -16,7 +16,7 @@ matchPluralityToTakePlurality(Plurality, TakePlurality) :-
 	matchKeyToValue([singular, plural], [takes, take], Plurality, TakePlurality).
 
 
-
+%Get the current word or check if it is at the current list index.
 word(WordBeingTested, [WordBeingTested | S], S).
 
 
