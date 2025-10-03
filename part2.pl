@@ -15,31 +15,53 @@ contains([Head | Tail], Element) :-
 	equals(Head, Element);
 	contains(Tail, Element).
 
-path(List1, List2) :-
+pathRecur(List1, List2, Depth) :-
 	equals(List1, List2);
-	transform(List1, TransformedList1), path(TransformedList1, List2).
-
-
-
-pathUnique(Paths, List1, EndPaths).
-	length(Paths, PathsLength),
+	
 	length(List1, List1Length),
-	factorial(List1Length, TotalPermutations),
-	implies(
-		not(equals(PathsLength, TotalPermutations)),
+	Depth < List1Length,
+	DepthPlusOne is Depth + 1,
+	transform(List1, TransformedList1),
+	pathRecur(TransformedList1, List2, DepthPlusOne).
+
+pathSecond(List1, List2) :- pathRecur(List1, List2, 0).
+
+path([List1Head | List1Tail], [List2Head | List2Tail]) :-
+	equals(List1Head, List2Head),
+	pathSecond(List1Tail, List2Tail).
+
+exclusiveOr(P, Q) :- 
+	P, not(Q);
+	Q, not(P).
+
+pathUnique(Paths, List1, EndPaths) :-
+	path(List1, List2),
+	length(List1, List1Length),
+	MinusOne is List1Length - 1,
+	factorial(MinusOne, Permutations),
+	exclusiveOr(
 		(
-			path(List1, FoundPath),
-			not(contains(Paths, FoundPath)),
-			pathUnique([FoundPath | Paths], List1, EndPaths)
-		)
-	),
-	implies(equals(PathsLength, TotalPermutations), 
+			not(contains(Paths, List2)),
+			pathUnique([List2 | Paths], List1, EndPaths)
+		),
 		(
-			equals(EndPaths, Paths)
+			equals(Paths, EndPaths),
+			length(Paths, PathsLength),
+			equals(PathsLength, Permutations)
 		)
 	).
 
+writeEach(EndPaths) :- 
+	equals(EndPaths, [EndPathsHead | EndPathsTail]), write(EndPathsHead), nl, writeEach(EndPathsTail); 
+	
+	equals(EndPaths, []).
 
+write_all(List1) :-
+	pathUnique([], List1, EndPaths),
+	%sort(EndPaths, EndPaths),
+	writeEach(EndPaths),
+	write("TERMINATED"),
+	halt(0).
 
 
 

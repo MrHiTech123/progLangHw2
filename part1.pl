@@ -98,23 +98,27 @@ answerQuestionString(Question, Answer) :-
 	preProcessQuestion(Question, QuestionList), answerQuestionList(QuestionList, Answer).
 
 
-%People online said to do this
-sorted(Sorted, Unsorted) :- sort(Sorted, Unsorted), sort(Sorted, Sorted).
-
-
-
 pluralityFromString(Question, Plurality) :- 
 	preProcessQuestion(Question, QuestionList),
 	question(Query, Plurality, QuestionList, []),
 	not(equals(Query, [])).
 
+singularAnswerFromBag(SortedBag, SingularAnswer) :-
+	equals(SortedBag, []), equals(SingularAnswer, none);
+	equals(SortedBag, [SingularAnswer | _]).
+
+pluralAnswerFromSortedBag(ConcatedSortedBag, PluralAnswer) :- 
+	equals(ConcatedSortedBag, ''), equals(PluralAnswer, none);
+	not(equals(ConcatedSortedBag, '')), equals(ConcatedSortedBag, PluralAnswer).
+
 ask_question(Question, Answer) :- 
 	pluralityFromString(Question, Plurality),
+	findall(X, answerQuestionString(Question, X), Bag),
+	msort(Bag, SortedBag),
+	atomic_list_concat(SortedBag, ", ", ConcatedSortedBag),
+	singularAnswerFromBag(SortedBag, SingularAnswer),
+	pluralAnswerFromSortedBag(ConcatedSortedBag, PluralAnswer),
 	(
-		equals(Plurality, plural), 
-		findall(X, answerQuestionString(Question, X), Bag),
-		msort(Bag, SortedBag),
-		equals(Answer, SortedBag);
-		
-		equals(Plurality, singular), answerQuestionString(Question, Answer)
+		equals(Plurality, plural), equals(Answer, PluralAnswer);
+		equals(Plurality, singular), equals(Answer, SingularAnswer)
 	).
