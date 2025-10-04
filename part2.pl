@@ -12,6 +12,7 @@ exclusiveOr(P, Q) :-
 transform([Head | [Second | Tail]], [Second | [Head | Tail]]).
 transform([Head | Tail], [TransformedHead | TransformedTail]) :- equals(Head, TransformedHead), transform(Tail, TransformedTail).
 
+%Sumtorial, finds sum(i = 0, Arg) and returns it in Answer.
 sumtorial(0, 0).
 sumtorial(Arg, Answer) :-
 	Arg > 0,
