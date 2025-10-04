@@ -12,6 +12,13 @@ exclusiveOr(P, Q) :-
 transform([Head | [Second | Tail]], [Second | [Head | Tail]]).
 transform([Head | Tail], [TransformedHead | TransformedTail]) :- equals(Head, TransformedHead), transform(Tail, TransformedTail).
 
+sumtorial(0, 0).
+sumtorial(Arg, Answer) :-
+	Arg > 0,
+	MinusOne is Arg - 1,
+	sumtorial(MinusOne, AnswerMinusOne),
+	Answer is Arg + AnswerMinusOne.
+
 %Factorial of Arg = Answer
 factorial(0, 1).
 factorial(Arg, Answer) :- 
@@ -30,7 +37,8 @@ pathRecur(List1, List2, Depth) :-
 	equals(List1, List2);
 	
 	length(List1, List1Length),
-	Depth < List1Length,
+	sumtorial(List1Length, MaxDepth),
+	Depth < MaxDepth,
 	DepthPlusOne is Depth + 1,
 	transform(List1, TransformedList1),
 	pathRecur(TransformedList1, List2, DepthPlusOne).
