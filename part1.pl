@@ -98,12 +98,16 @@ preProcessQuestionPlayerCheck(Question, QuestionList) :-
 
 % Preprocess either type of question.
 preProcessQuestion(Question, QuestionList) :- 
-	preProcessQuestionTimeCheck(Question, QuestionList);
-	preProcessQuestionPlayerCheck(Question, QuestionList).
+	downcase_atom(Question, LowercaseQuestion),
+	(
+		preProcessQuestionTimeCheck(LowercaseQuestion, QuestionList);
+		preProcessQuestionPlayerCheck(LowercaseQuestion, QuestionList)
+	).
 
 % Find an answer to a question
 answerQuestionString(Question, Answer) :- 
 	preProcessQuestion(Question, QuestionList), answerQuestionList(QuestionList, Answer).
+
 
 % Get the plurality from a question string.
 pluralityFromString(Question, Plurality) :- 
@@ -120,6 +124,7 @@ singularAnswerFromBag(SortedBag, SingularAnswer) :-
 pluralAnswerFromSortedBag(ConcatedSortedBag, PluralAnswer) :- 
 	equals(ConcatedSortedBag, ''), equals(PluralAnswer, none);
 	not(equals(ConcatedSortedBag, '')), equals(ConcatedSortedBag, PluralAnswer).
+
 
 % Ask a question and return the answer.
 ask_question(Question, Answer) :- 
